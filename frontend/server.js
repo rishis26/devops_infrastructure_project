@@ -7,7 +7,7 @@ app.get("/", (req, res) => {
   res.send(
     `
         <h1>Infrastructure Project</h1>
-        <p>Frontend is on port ${PORT} and running</p>
+        <p>Frontend is on port ${PORT} and deployed by CI/CD</p>
         `,
   );
 });
