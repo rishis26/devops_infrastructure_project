@@ -21,4 +21,4 @@ jobs:
           script: |
             cd ~/devops_infrastructure_project
             ./deploy.sh
-            curl -f https://localhost:8080/health
+            curl -f http://localhost:8080/health
