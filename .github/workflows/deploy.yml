@@ -20,5 +20,17 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             cd ~/devops_infrastructure_project
-            ./deploy.sh
-            curl -f http://localhost:8080/health
+                        ./deploy.sh
+
+            for i in {1..10}; do
+              if curl -f http://localhost:8080/health; then
+                echo "Backend is healthy."
+                exit 0
+              fi
+
+              echo "Backend is not ready yet. Retrying..."
+              sleep 3
+            done
+
+            echo "Backend failed health check."
+            exit 1
