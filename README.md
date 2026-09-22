@@ -1,137 +1,132 @@
+
 # DevOps Infrastructure Project
 
 ### Infrastructure as Code with Terraform + Azure + Docker + CI/CD
 
-[![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://www.linux.org/)
-[![Bash](https://img.shields.io/badge/Bash-121011?style=for-the-badge&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
+![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)
+![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
 ---
 
 ## About
 
-This is a hands-on DevOps learning project with **Terraform as the main focus**.
+This project was built as a hands-on **DevOps learning project**.
 
-The main goal was to understand how cloud infrastructure can be defined as code and then used together with Docker and CI/CD.
+The application itself is intentionally simple. The main purpose was not to build a complex application, but to understand how application infrastructure can be created, configured, deployed, monitored, and automated.
 
-The application itself is intentionally small. The application exists mainly to provide something that can be containerized and deployed while learning infrastructure and automation.
+The project focused on:
 
-The main learning path was:
+- Infrastructure as Code
+- Terraform
+- Microsoft Azure
+- Linux
+- SSH
+- Docker
+- Docker Compose
+- GitHub Actions
+- CI/CD
+- Health checks
+- Deployment debugging
 
-```text
-Terraform
-    │
-    ▼
-Azure Infrastructure
-    │
-    ├── Resource Group
-    ├── Virtual Network
-    ├── Subnet
-    ├── Network Security Group
-    ├── Public IP
-    ├── Network Interface
-    └── Linux Virtual Machine
-              │
-              ▼
-           Docker
-              │
-        ┌─────┴─────┐
-        ▼           ▼
-    Frontend     Backend
-      :3000        :8080
-              │
-              ▼
-        GitHub Actions
-              │
-              ▼
-             CI/CD
-```
+The most important part of this project was learning **Terraform and Infrastructure as Code**.
 
 ---
 
 # Main Focus: Terraform
 
-## Why Terraform?
+Terraform was the central concept of this project.
 
-One of the main things I wanted to learn in this project was **Infrastructure as Code**.
+Instead of manually creating every Azure resource through the Azure Portal, I defined the infrastructure in code and allowed Terraform to create and manage it.
 
-Instead of manually creating every Azure resource through the Azure Portal:
+The idea was:
+
+```text
+Terraform Configuration
+        ↓
+Terraform Plan
+        ↓
+Terraform Apply
+        ↓
+Azure Infrastructure
+````
+
+This made the infrastructure reproducible and allowed me to understand exactly what resources were required for the application.
+
+---
+
+# Why Terraform?
+
+Before using Terraform, cloud resources can be created manually through a cloud provider's dashboard.
+
+For example:
 
 ```text
 Azure Portal
-     │
-     ├── Create Resource Group
-     ├── Create VNet
-     ├── Create Subnet
-     ├── Create NSG
-     ├── Add Security Rules
-     ├── Create Public IP
-     ├── Create NIC
-     └── Create VM
+   ↓
+Create Resource Group
+   ↓
+Create Virtual Network
+   ↓
+Create Subnet
+   ↓
+Create NSG
+   ↓
+Create Public IP
+   ↓
+Create NIC
+   ↓
+Create VM
 ```
 
-Terraform allows the infrastructure to be described in code:
+Terraform allows the same infrastructure to be described as code.
 
 ```text
-terraform/main.tf
-        │
-        ▼
-     Terraform
-        │
-        ▼
-      Azure
+main.tf
+   ↓
+Terraform
+   ↓
+Azure
 ```
 
-The main concept learned was:
+This is the main lesson I wanted to understand from this project:
 
-> Infrastructure can be defined as code, reviewed before deployment, and managed using Terraform.
+> Infrastructure can be treated as code.
 
 ---
 
 # Terraform Architecture
 
-The Terraform configuration created the following infrastructure:
+The Terraform configuration was located inside:
 
 ```text
-                    Terraform
-                        │
-                        ▼
-              ┌──────────────────┐
-              │    AzureRM       │
-              │     Provider     │
-              └────────┬─────────┘
-                       │
-                       ▼
-              Resource Group
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-        ▼              ▼              ▼
-      VNet            NSG          Public IP
-        │              │
-        ▼              ▼
-     Subnet       Security Rules
-        │
-        ▼
-       NIC
-        │
-        ▼
-   Linux VM
+terraform/
+├── main.tf
+└── .terraform.lock.hcl
 ```
+
+The main configuration defined the Azure infrastructure required by the project.
+
+The infrastructure included:
+
+* Resource Group
+* Virtual Network
+* Subnet
+* Network Security Group
+* Network Security Rules
+* Public IP
+* Network Interface
+* Linux Virtual Machine
 
 ---
 
 # Terraform Provider
 
-Terraform uses providers to communicate with external platforms.
-
-For this project, the AzureRM provider was used:
+The Azure provider was configured in `main.tf`.
 
 ```hcl
 terraform {
@@ -148,43 +143,25 @@ provider "azurerm" {
 }
 ```
 
-Conceptually:
+The provider is what allows Terraform to communicate with Azure.
+
+In simple terms:
 
 ```text
 Terraform
-    │
-    │ AzureRM Provider
-    ▼
+   ↓
+Azure Provider
+   ↓
 Microsoft Azure
 ```
-
-The provider gives Terraform the ability to create and manage Azure resources.
 
 ---
 
 # Terraform Resources
 
-The project used Terraform resources for:
+The infrastructure was created using Terraform resources.
 
-```text
-Resource Group
-      │
-      ├── Virtual Network
-      │       │
-      │       └── Subnet
-      │
-      ├── Network Security Group
-      │       ├── SSH : 22
-      │       └── Frontend : 3000
-      │
-      ├── Public IP
-      │
-      ├── Network Interface
-      │
-      └── Linux Virtual Machine
-```
-
-For example:
+## Resource Group
 
 ```hcl
 resource "azurerm_resource_group" "main" {
@@ -193,312 +170,355 @@ resource "azurerm_resource_group" "main" {
 }
 ```
 
-The important concept here is **desired state**.
+This created the main Azure resource group.
 
-The Terraform configuration describes what infrastructure should exist.
+---
+
+## Virtual Network
+
+```hcl
+resource "azurerm_virtual_network" "main" {
+  name                = "devops-infrastructure-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+```
+
+The virtual network provided the private network for the infrastructure.
+
+---
+
+## Subnet
+
+```hcl
+resource "azurerm_subnet" "main" {
+  name                 = "devops-infrastructure-subnet"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+```
+
+The subnet was created inside the virtual network.
+
+---
+
+# Network Security Group
+
+The project also created an Azure Network Security Group.
+
+The NSG controlled which inbound ports could reach the VM.
+
+The project allowed:
+
+| Port   | Purpose  |
+| ------ | -------- |
+| `22`   | SSH      |
+| `3000` | Frontend |
+
+The backend ran on port `8080`, but it was not publicly exposed through the Azure NSG.
+
+This helped me understand an important difference:
+
+```text
+Docker port publishing
+        ≠
+Azure network access
+```
+
+Docker can expose a port on the VM while Azure's network security rules can still prevent external access.
+
+---
+
+# Public IP
+
+Terraform also created the public IP:
+
+```hcl
+resource "azurerm_public_ip" "main" {
+  name              = "devops-infrastructure-ip"
+  location          = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  allocation_method = "Static"
+  sku               = "Standard"
+}
+```
+
+This allowed the VM to be accessed from the internet.
+
+---
+
+# Network Interface
+
+The VM required a network interface connected to the subnet and public IP.
+
+Terraform handled this as well.
+
+```text
+Internet
+   ↓
+Public IP
+   ↓
+Network Interface
+   ↓
+Subnet
+   ↓
+Virtual Network
+   ↓
+VM
+```
+
+---
+
+# Azure Virtual Machine
+
+Finally, Terraform created the Linux VM.
+
+The VM used:
+
+```text
+Ubuntu 22.04
+Standard_B1s
+Central India
+```
+
+The VM was configured with the project-specific SSH public key.
+
+The private SSH key remained on my local machine.
+
+---
+
+## Azure Infrastructure Created Through Terraform
+
+![Azure VM](docs/images/azure_vm.png)
 
 ---
 
 # Terraform Workflow
 
-The basic Terraform workflow practiced in this project was:
+The Terraform workflow I learned was:
 
 ```text
-main.tf
-   │
-   ▼
+Write Configuration
+        ↓
+terraform fmt
+        ↓
 terraform init
-   │
-   ▼
+        ↓
 terraform validate
-   │
-   ▼
+        ↓
 terraform plan
-   │
-   ▼
-terraform apply
-   │
-   ▼
-Azure Infrastructure
-```
-
-## 1. Initialize
-
-```bash
-terraform init
-```
-
-This initializes the Terraform directory and downloads the required provider.
-
----
-
-## 2. Validate
-
-```bash
-terraform validate
-```
-
-This checks whether the Terraform configuration is valid.
-
----
-
-## 3. Plan
-
-```bash
-terraform plan
-```
-
-This shows what Terraform intends to create or change.
-
-Conceptually:
-
-```text
-main.tf
-   │
-   ▼
-terraform plan
-   │
-   ▼
-Review proposed infrastructure changes
-```
-
-This is important because infrastructure changes can be reviewed before they are applied.
-
----
-
-## 4. Apply
-
-```bash
+        ↓
 terraform apply
 ```
 
-This applies the configuration and creates the infrastructure in Azure.
+Each command has a different purpose.
+
+---
+
+## `terraform fmt`
+
+Formats Terraform files into the standard Terraform style.
+
+```bash
+terraform fmt
+```
+
+---
+
+## `terraform init`
+
+Initializes the Terraform project and downloads the required provider.
+
+```bash
+terraform init
+```
+
+---
+
+## `terraform validate`
+
+Checks whether the Terraform configuration is syntactically and structurally valid.
+
+```bash
+terraform validate
+```
+
+---
+
+## `terraform plan`
+
+Shows what Terraform intends to change.
+
+```bash
+terraform plan
+```
+
+This was one of the important Terraform concepts I learned.
+
+Terraform does not immediately change infrastructure when running `plan`.
+
+It first shows the proposed changes.
+
+---
+
+## `terraform apply`
+
+Actually creates or changes the infrastructure.
+
+```bash
+terraform apply
+```
 
 ---
 
 # Terraform State
 
-Another important concept learned was **Terraform state**.
+Terraform keeps track of infrastructure using its state.
 
-Terraform needs to keep track of infrastructure that it manages.
+The state contains information about resources Terraform manages.
 
-Conceptually:
-
-```text
-Terraform Configuration
-          │
-          ▼
-    Desired State
-          │
-          │ compare
-          ▼
-   Terraform State
-          │
-          ▼
-   Actual Infrastructure
-```
-
-Terraform state files and the `.terraform` directory were excluded from Git through `.gitignore`.
-
-The purpose was to understand the basic relationship between:
-
-- Configuration
-- State
-- Actual infrastructure
-
----
-
-# Azure Infrastructure
-
-Terraform created the Azure infrastructure required for the project.
-
-The main resources were:
-
-| Resource               | Purpose                        |
-| ---------------------- | ------------------------------ |
-| Resource Group         | Holds the Azure resources      |
-| Virtual Network        | Provides the network           |
-| Subnet                 | Network segment for the VM     |
-| Network Security Group | Controls network access        |
-| Network Security Rules | Controls allowed ports         |
-| Public IP              | Provides public access         |
-| Network Interface      | Connects the VM to the network |
-| Linux VM               | Hosts the application          |
-
-The VM used during development was:
-
-- Ubuntu 22.04
-- Standard B1s
-- 1 vCPU
-- Approximately 1 GiB memory
-- Central India
-
-### Azure VM
-
-![Azure VM created through Terraform](docs/images/azure_vm.png)
-
-The VM shown here was created as part of the Terraform-managed infrastructure.
-
-> The VM was later deleted after completing the project so that unnecessary cloud resources were not left running.
-
----
-
-# Azure Networking
-
-Terraform also created the networking required by the VM.
+For example:
 
 ```text
-Azure
-│
-└── Resource Group
-    │
-    └── Virtual Network
-        │
-        └── Subnet
-            │
-            └── Network Interface
-                    │
-                    ▼
-                   VM
+Terraform
+    ↓
+State
+    ↓
+Azure Resources
 ```
 
-The Network Security Group contained rules for:
+The state files were intentionally ignored from Git:
 
-```text
-Port 22
-   │
-   └── SSH
-
-Port 3000
-   │
-   └── Frontend
+```gitignore
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
 ```
 
-The backend used port `8080`, but it was not publicly allowed through the Azure Network Security Group.
-
-This helped me understand an important distinction:
-
-```text
-Docker Port Mapping
-        ≠
-Azure Network Access
-```
-
-A container can expose a port while the cloud network can still block public access to that port.
+The provider lock file was kept in the repository.
 
 ---
 
 # Docker
 
-Docker was used to containerize the application services.
+After creating the infrastructure, the next part was running the application using Docker.
 
-The project contains:
+There were two simple services:
 
 ```text
-backend/
-    └── Dockerfile
+Frontend
+   ↓
+Port 3000
 
-frontend/
-    └── Dockerfile
+Backend
+   ↓
+Port 8080
 ```
 
-The Dockerfiles use Node.js Alpine images and install the application dependencies inside the containers.
+Both services had their own Dockerfile.
 
-The concepts practiced included:
+---
 
-- Docker images
-- Docker containers
-- Dockerfiles
-- Image building
-- Container startup
-- Port mapping
-- Container logs
-- Container resource usage
+# Backend Dockerfile
+
+```dockerfile
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["npm", "start"]
+```
+
+The backend exposed port `8080`.
+
+---
+
+# Frontend Dockerfile
+
+```dockerfile
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+The frontend exposed port `3000`.
 
 ---
 
 # Docker Compose
 
-Docker Compose was used to manage both services together.
+Instead of starting both containers manually, Docker Compose was used.
 
-```text
-Docker Compose
-      │
-      ├── Frontend
-      │     └── :3000
-      │
-      └── Backend
-            └── :8080
+```yaml
+services:
+  backend:
+    build: ./backend
+    container_name: infrastructure-backend
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: infrastructure-frontend
+    ports:
+      - "3000:3000"
 ```
 
-The services were defined in:
-
-```text
-docker-compose.yml
-```
-
-The complete application could then be started with:
-
-```bash
-docker compose up -d
-```
-
-or rebuilt with:
+This allowed both services to be started together.
 
 ```bash
 docker compose up -d --build
 ```
+
+---
+
+## Application Deployment
+
+![Application Deployment](docs/images/deployment.png)
+
+![Application Deployment](docs/images/deployment-1.png)
 
 ---
 
 # Linux and SSH
 
-After Terraform created the VM, I connected to it using SSH.
+The Azure VM was running Ubuntu Linux.
 
-A dedicated project SSH key was used for the infrastructure project.
-
-The workflow was:
-
-```text
-Terraform
-   │
-   └── Creates VM with public SSH key
-                    │
-                    ▼
-                  SSH
-                    │
-                    ▼
-              Ubuntu VM
-                    │
-                    ▼
-                 Docker
-```
-
-Some of the commands practiced on the VM were:
+I connected to the VM using SSH:
 
 ```bash
-docker ps
-docker logs
-docker stats --no-stream
-docker compose up -d
-docker compose up -d --build
-curl
-free -h
-df -h
-uptime
+ssh -i ~/.ssh/devops-infrastructure-project azureuser@<VM_PUBLIC_IP>
 ```
+
+A dedicated SSH key was created specifically for this project.
+
+The private key was never committed to GitHub.
 
 ---
 
 # Deployment Script
 
-A simple deployment script was created:
-
-```text
-deploy.sh
-```
-
-The script:
+The deployment process was placed into `deploy.sh`.
 
 ```bash
 #!/bin/bash
@@ -514,303 +534,215 @@ docker compose up -d --build
 echo "Deployment completed successfully."
 ```
 
-The purpose was to keep the deployment process simple and predictable.
+This made the deployment process repeatable.
 
-GitHub Actions could connect to the VM and execute:
+Instead of manually typing every command:
 
 ```text
-./deploy.sh
+git pull
+docker compose build
+docker compose up
 ```
 
-instead of having every deployment command written directly inside the workflow.
+the VM could simply run:
+
+```bash
+./deploy.sh
+```
 
 ---
 
 # GitHub Actions
 
-After the infrastructure and application were working, GitHub Actions was used to automate deployment.
+GitHub Actions was used to automate deployment.
 
-The workflow was:
-
-```text
-git push
-   │
-   ▼
-GitHub Actions
-   │
-   ▼
-Checkout repository
-   │
-   ▼
-SSH into Azure VM
-   │
-   ▼
-./deploy.sh
-   │
-   ├── git pull
-   │
-   └── docker compose up -d --build
-   │
-   ▼
-Backend health check
-   │
-   ▼
-Deployment result
-```
-
----
-
-# CI/CD
-
-The project helped me understand the practical flow of CI/CD.
+The basic flow was:
 
 ```text
-Code Change
-     │
-     ▼
-Git Commit
-     │
-     ▼
 Git Push
-     │
-     ▼
-GitHub
-     │
-     ▼
+   ↓
 GitHub Actions
-     │
-     ▼
+   ↓
 SSH
-     │
-     ▼
+   ↓
 Azure VM
-     │
-     ▼
+   ↓
+deploy.sh
+   ↓
 Docker Compose
-     │
-     ▼
-Updated Application
-```
-
-A frontend message was changed during development to verify that a Git push could travel through the entire deployment pipeline.
-
-### Application After Deployment
-
-![Application deployed through CI/CD](docs/images/deployment-1.png)
-
-The application displayed:
-
-```text
-Infrastructure Project
-
-Frontend is on port 3000 and deployed by CI/CD
+   ↓
+Application
 ```
 
 ---
 
-# Health Checks
+# CI/CD Workflow
 
-The backend contains a health endpoint:
+The workflow was triggered by pushes to the `main` branch.
 
-```text
-GET /health
-```
+The deployment process used:
 
-The response is:
+* GitHub Actions
+* SSH
+* Azure VM
+* Docker Compose
+* Deployment script
+* Backend health check
 
-```json
-{
-  "status": "ok"
-}
-```
-
-GitHub Actions checks this endpoint after deployment.
-
-The purpose is to verify that the backend is actually responding instead of only checking whether the deployment command completed.
-
----
-
-# The Failure
-
-The project was not completed successfully on the first attempt.
-
-The first health-check implementation resulted in a **red GitHub Actions run**.
-
-![Failed GitHub Actions run](docs/images/error.png)
-
-This was useful because the failure showed that the deployment process still had a problem that needed to be investigated.
-
-The important part was not simply getting a green check.
-
-The important part was understanding **why it failed**.
-
----
-
-# Debugging the Health Check
-
-The first health check used HTTPS:
+The workflow connected to the VM and executed:
 
 ```bash
-curl -f https://localhost:8080/health
+cd ~/devops_infrastructure_project
+./deploy.sh
 ```
 
-However, the backend was running over HTTP.
+---
 
-The correct request was:
+# GitHub Actions Secrets
 
-```bash
-curl -f http://localhost:8080/health
+Sensitive connection information was stored as GitHub Actions secrets instead of being written directly into the workflow.
+
+The secrets used were:
+
+```text
+VM_HOST
+VM_USER
+VM_SSH_KEY
 ```
 
-After correcting that, another issue became visible.
+The private SSH key was stored as a GitHub secret and was never committed to the repository.
 
-The backend sometimes needed a few seconds to become ready after Docker rebuilt and restarted the container.
+![GitHub Actions Secrets](docs/images/secret_screen.png)
 
-Therefore, checking the endpoint only once immediately after deployment could still fail.
+---
+
+# The First CI/CD Failure
+
+The first health check did not succeed.
+
+The initial workflow attempted to check the backend using HTTPS:
+
+```text
+https://localhost:8080/health
+```
+
+But the backend was a normal HTTP Express server.
+
+The correct endpoint was:
+
+```text
+http://localhost:8080/health
+```
+
+This resulted in the first failed GitHub Actions deployment.
+
+![Failed GitHub Actions Run](docs/images/error.png)
+
+---
+
+# Debugging the Failure
+
+The failure helped identify two separate things.
+
+## 1. HTTP vs HTTPS
+
+The backend was running using HTTP.
+
+So:
+
+```text
+Wrong:
+https://localhost:8080/health
+
+Correct:
+http://localhost:8080/health
+```
+
+The workflow was changed accordingly.
+
+---
+
+## 2. Application Readiness
+
+After fixing HTTP, there was another issue.
+
+The container could still be starting when GitHub Actions immediately performed the health check.
+
+This meant that even though the application was going to work, the check could happen too early.
+
+The solution was to add retry logic.
 
 ---
 
 # Adding Retry Logic
 
-Instead of removing the health check, the workflow was improved to retry.
+The workflow was changed to retry the health check several times.
 
-The final logic was:
+The basic idea was:
 
 ```text
-Deploy
-   │
-   ▼
-Check /health
-   │
-   ├── Healthy
-   │      │
-   │      ▼
-   │    Success
-   │
-   └── Not ready
-          │
-          ▼
-       Wait 3s
-          │
-          ▼
-       Try again
-          │
-          ▼
-       Continue
+Check backend
+    ↓
+Is it healthy?
+    ↓
+YES → Success
+    ↓
+NO
+    ↓
+Wait
+    ↓
+Try again
 ```
 
-This taught me an important practical DevOps concept:
+The final workflow checked the backend multiple times before declaring the deployment failed.
 
-> A container being started does not necessarily mean that the application inside it is immediately ready to accept requests.
+This made the deployment more reliable.
 
 ---
 
 # From Red to Green
 
-The learning process looked like:
+The final deployment successfully:
 
 ```text
-First Attempt
-     │
-     ▼
-   RED
-     │
-     ▼
-Read GitHub Actions logs
-     │
-     ▼
-Find HTTPS / HTTP issue
-     │
-     ▼
-Fix health check
-     │
-     ▼
-Find startup/readiness issue
-     │
-     ▼
-Add retry logic
-     │
-     ▼
-Run again
-     │
-     ▼
-  GREEN
+Git Push
+   ↓
+GitHub Actions
+   ↓
+SSH into VM
+   ↓
+git pull
+   ↓
+docker compose up -d --build
+   ↓
+Backend health check
+   ↓
+HTTP 200
+   ↓
+Deployment successful
 ```
 
-### Successful Deployment
+![Successful GitHub Actions Run](docs/images/github_action.png)
 
-![Successful GitHub Actions deployment](docs/images/github_action.png)
-
-This successful run confirmed that the deployment workflow was working after the fixes.
-
----
-
-# GitHub Actions Run History
-
-The GitHub Actions history is part of the learning process.
-
-There was a failed run:
-
-```text
-Failed health-check deployment
-        │
-        ▼
-Investigated
-        │
-        ▼
-Fixed
-        │
-        ▼
-Successful deployment
-```
-
-The red run was not hidden or removed.
-
-It demonstrates that the project involved actual debugging rather than simply documenting a workflow that worked perfectly on the first attempt.
+![GitHub Actions Deployment](docs/images/github_action-1.png)
 
 ---
 
 # Other Small Mistakes and Fixes
 
-There were also smaller problems during the project.
+This project was intentionally documented as a learning process.
+
+Not everything worked on the first attempt.
+
+Some of the issues encountered included:
 
 ### Dockerfile syntax
 
-A Dockerfile command initially contained a syntax issue.
+There were small Dockerfile configuration mistakes during development that had to be corrected before the containers could build successfully.
 
-The problem was identified while building the image and corrected before continuing.
+### Azure networking
 
-### Container startup
-
-The backend and frontend containers were tested individually before being combined through Docker Compose.
-
-This helped isolate problems instead of debugging multiple layers at the same time.
-
-### HTTP vs HTTPS
-
-The health check initially used:
-
-```text
-https://localhost:8080
-```
-
-while the backend was serving:
-
-```text
-http://localhost:8080
-```
-
-The request was corrected.
-
-### Service readiness
-
-The backend could take a few seconds to become available after a rebuild.
-
-The health check was therefore changed from a single check to retry-based checking.
-
-### Azure Networking
-
-Testing the application also helped clarify the difference between:
+Understanding the difference between:
 
 ```text
 Docker port publishing
@@ -819,62 +751,61 @@ Docker port publishing
 and:
 
 ```text
-Azure Network Security Group rules
+Azure NSG rules
 ```
 
-These were useful mistakes because each one helped connect the different layers of the system.
+was another important part of the project.
 
----
+### Health check protocol
 
-# GitHub Actions Secrets
+The first health check used HTTPS instead of HTTP.
 
-Sensitive deployment information was stored using GitHub repository secrets.
+### Application readiness
 
-The configured secrets were:
+The backend was sometimes not ready immediately when the workflow performed the first health check.
 
-```text
-VM_HOST
-VM_USER
-VM_SSH_KEY
-```
+The retry mechanism solved this.
 
-### Repository Secrets
-
-![GitHub Actions repository secrets](docs/images/secret_screen.png)
-
-The private SSH key itself was not committed to the repository.
+These failures were useful because they showed how deployment problems are actually diagnosed instead of only seeing the final successful result.
 
 ---
 
 # Monitoring the VM
 
-After deployment, basic system and container resource usage was checked.
+While the VM was running, basic Linux and Docker monitoring commands were used.
 
-Commands used included:
+## Memory
 
 ```bash
 free -h
-df -h
-uptime
-docker stats --no-stream
 ```
 
-These helped inspect:
+## Disk
 
-- Memory usage
-- Available memory
-- Disk usage
-- CPU/load
-- Container memory usage
-- Container CPU usage
-- Network I/O
-- Container process count
+```bash
+df -h
+```
 
-Example container monitoring was performed using:
+## System uptime and load
+
+```bash
+uptime
+```
+
+## Docker resource usage
 
 ```bash
 docker stats --no-stream
 ```
+
+The VM had approximately:
+
+```text
+Memory: ~897 MB
+Disk: ~29 GB
+```
+
+The two application containers used only a small amount of memory.
 
 ---
 
@@ -883,9 +814,8 @@ docker stats --no-stream
 ```text
 devops_infrastructure_project/
 │
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
+├── .gitignore
+├── README.md
 │
 ├── backend/
 │   ├── Dockerfile
@@ -897,329 +827,236 @@ devops_infrastructure_project/
 │   ├── package.json
 │   └── server.js
 │
+├── deploy.sh
+├── docker-compose.yml
+│
 ├── terraform/
 │   ├── main.tf
 │   └── .terraform.lock.hcl
 │
-├── docs/
-│   └── images/
-│       ├── azure_vm.png
-│       ├── deployment-1.png
-│       ├── deployment.png
-│       ├── error.png
-│       ├── github_action-1.png
-│       ├── github_action.png
-│       └── secret_screen.png
-│
-├── docker-compose.yml
-├── deploy.sh
-├── .gitignore
-└── README.md
+└── docs/
+    └── images/
+        ├── azure_vm.png
+        ├── deployment-1.png
+        ├── deployment.png
+        ├── error.png
+        ├── github_action-1.png
+        ├── github_action.png
+        └── secret_screen.png
 ```
-
-Terraform working directories and state files are intentionally excluded from Git.
 
 ---
 
 # Technologies
 
-[![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
-[![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://www.linux.org/)
-[![Bash](https://img.shields.io/badge/Bash-121011?style=for-the-badge&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
-
-| Technology      | Role                            |
-| --------------- | ------------------------------- |
-| Terraform       | Infrastructure as Code          |
-| Microsoft Azure | Cloud infrastructure            |
-| Docker          | Containerization                |
-| Docker Compose  | Multi-container deployment      |
-| GitHub Actions  | CI/CD automation                |
-| Ubuntu Linux    | Cloud VM operating system       |
-| SSH             | Remote server access            |
-| Bash            | Deployment scripting            |
-| Node.js         | Application runtime             |
-| Express.js      | Small frontend/backend services |
-| Git             | Version control                 |
-| GitHub          | Source code hosting             |
+| Technology      | Purpose                       |
+| --------------- | ----------------------------- |
+| Terraform       | Infrastructure as Code        |
+| Microsoft Azure | Cloud infrastructure          |
+| Ubuntu          | Server operating system       |
+| SSH             | Remote server access          |
+| Docker          | Containerization              |
+| Docker Compose  | Multi-container application   |
+| Node.js         | Application runtime           |
+| Express.js      | Backend and frontend services |
+| Git             | Version control               |
+| GitHub          | Source code hosting           |
+| GitHub Actions  | CI/CD automation              |
+| Bash            | Deployment automation         |
 
 ---
 
 # What I Actually Learned
 
-The main learning outcome was **not** building the Node.js application.
+## Terraform
 
-The main goal was understanding how different DevOps tools connect together.
+The biggest learning from this project was understanding Infrastructure as Code.
 
-The project connected:
+I learned:
+
+* What Terraform is
+* What a Terraform provider does
+* What Terraform resources are
+* How Terraform creates Azure infrastructure
+* `terraform init`
+* `terraform fmt`
+* `terraform validate`
+* `terraform plan`
+* `terraform apply`
+* Terraform state
+* Resource dependencies
+* Azure networking through Terraform
+* Creating a VM through Terraform
+
+---
+
+## Cloud
+
+I learned how the different Azure resources connect together.
 
 ```text
-Infrastructure as Code
-        │
-        ▼
-    Terraform
-        │
-        ▼
-      Azure
-        │
-        ▼
-    Linux VM
-        │
-        ▼
-      Docker
-        │
-        ▼
- Docker Compose
-        │
-        ▼
- GitHub Actions
-        │
-        ▼
-      CI/CD
+Resource Group
+      ↓
+Virtual Network
+      ↓
+Subnet
+      ↓
+Network Interface
+      ↓
+Public IP
+      ↓
+Virtual Machine
 ```
 
----
-
-# Terraform Learning
-
-The most important Terraform concepts learned were:
-
-- Providers
-- Resources
-- Desired state
-- Terraform state
-- Infrastructure as Code
-- Resource dependencies
-- `terraform init`
-- `terraform validate`
-- `terraform plan`
-- `terraform apply`
-
-The project helped me understand that Terraform is essentially a way to describe infrastructure in code and let Terraform handle creating and managing that infrastructure.
+I also learned the role of Network Security Groups in controlling network access.
 
 ---
 
-# Cloud Learning
+## Docker
 
-The Azure concepts practiced were:
+I learned:
 
-- Resource Groups
-- Virtual Networks
-- Subnets
-- Network Security Groups
-- Network Security Rules
-- Public IP addresses
-- Network Interfaces
-- Linux Virtual Machines
-
----
-
-# Container Learning
-
-Docker concepts practiced were:
-
-- Docker images
-- Docker containers
-- Dockerfiles
-- Image builds
-- Container ports
-- Container logs
-- Docker Compose
-- Container resource monitoring
+* How Dockerfiles work
+* How Docker builds images
+* How containers run applications
+* Port mapping
+* Docker Compose
+* Running multiple services together
+* Basic container monitoring
 
 ---
 
-# Automation Learning
+## Linux
 
-The automation concepts practiced were:
+I learned basic server operations:
 
-- GitHub Actions
-- CI/CD
-- SSH-based deployment
-- Repository secrets
-- Deployment scripts
-- Health checks
-- Retry logic
-- Deployment debugging
+* SSH
+* Installing packages
+* Running Docker on Ubuntu
+* Checking system resources
+* Checking running containers
+* Running deployment scripts
 
 ---
 
-# Linux Learning
+## CI/CD
 
-The Linux concepts practiced were:
+I learned how a simple deployment pipeline works:
 
-- SSH access
-- Docker administration
-- Service testing with `curl`
-- Memory inspection
-- Disk inspection
-- CPU/load inspection
-- Container monitoring
+```text
+Code Change
+    ↓
+Git Push
+    ↓
+GitHub Actions
+    ↓
+SSH
+    ↓
+Server
+    ↓
+Docker Compose
+    ↓
+Health Check
+```
+
+More importantly, I learned that CI/CD is not always successful on the first attempt.
+
+Debugging the failed health check and then making the workflow reliable was part of the learning.
 
 ---
 
 # Final Architecture
 
 ```text
-                         GitHub
-                           │
-                      git push main
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │ GitHub Actions  │
-                  └────────┬────────┘
-                           │
-                          SSH
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────┐
-│                     Azure                           │
-│                                                     │
-│  ┌───────────────────────────────────────────────┐  │
-│  │                 Linux VM                     │  │
-│  │                                               │  │
-│  │   ┌───────────────────────────────────────┐   │  │
-│  │   │          Docker Compose              │   │  │
-│  │   │                                       │   │  │
-│  │   │  ┌────────────┐    ┌────────────┐   │   │  │
-│  │   │  │ Frontend   │    │  Backend   │   │   │  │
-│  │   │  │   :3000    │    │   :8080    │   │   │  │
-│  │   │  └────────────┘    └────────────┘   │   │  │
-│  │   └───────────────────────────────────────┘   │  │
-│  └───────────────────────────────────────────────┘  │
-│                                                     │
-│  Resource Group                                    │
-│  VNet → Subnet → NSG → NIC → Public IP → VM       │
-└─────────────────────────────────────────────────────┘
-                           ▲
-                           │
-                    Terraform manages
-                           │
-                    ┌──────┴──────┐
-                    │  main.tf    │
-                    └─────────────┘
+                     GitHub
+                        │
+                        │ git push
+                        ▼
+               GitHub Actions
+                        │
+                        │ SSH
+                        ▼
+                Azure Linux VM
+                        │
+                 deploy.sh
+                        │
+                        ▼
+              Docker Compose
+                 /          \
+                /            \
+               ▼              ▼
+        Frontend            Backend
+        Port 3000           Port 8080
+                              │
+                              ▼
+                         /health
+```
+
+Terraform managed the infrastructure underneath:
+
+```text
+                    Terraform
+                        │
+                        ▼
+                 Microsoft Azure
+                        │
+        ┌───────────────┼────────────────┐
+        ▼               ▼                ▼
+   Resource Group    Networking          VM
+                        │
+                 ┌──────┴──────┐
+                 ▼             ▼
+               VNet           NSG
+                 │
+               Subnet
+                 │
+                NIC
+                 │
+             Public IP
 ```
 
 ---
 
 # Project Status
 
-The project was completed as a learning exercise.
+The project was created as a hands-on DevOps learning environment.
 
-The Azure VM was intentionally deleted after the infrastructure and deployment exercises were completed.
+The Azure VM was intentionally deleted after the deployment and CI/CD work was completed.
 
-The repository remains as a record of:
+The source code, Terraform configuration, Git history, GitHub Actions workflow, documentation, and screenshots remain in the repository as a record of the learning process.
 
-- Terraform infrastructure definitions
-- Azure infrastructure configuration
-- Docker configuration
-- Docker Compose configuration
-- Linux VM setup
-- SSH configuration
-- GitHub Actions workflow
-- Deployment script
-- CI/CD implementation
-- Health-check implementation
-- Debugging process
-- Failed and successful deployment runs
-- Project screenshots
-- DevOps concepts learned
-
-The project was intentionally kept small so that the main focus remained on:
-
-```text
-Terraform
-   ↓
-Azure
-   ↓
-Docker
-   ↓
-GitHub Actions
-   ↓
-CI/CD
-   ↓
-Health Checks
-   ↓
-Debugging
-```
+The project does not currently run on a live Azure VM.
 
 ---
 
 # Key Takeaway
 
-The biggest lesson from this project was that DevOps is not just about knowing individual tools.
+The main lesson from this project was not the application itself.
 
-It is about understanding how the tools work together.
+It was understanding how infrastructure and deployment fit together:
 
 ```text
 Terraform
-    │
-    │ Creates infrastructure
-    ▼
+   ↓
+Infrastructure
+   ↓
 Azure
-    │
-    │ Hosts the VM
-    ▼
-Linux
-    │
-    │ Runs containers
-    ▼
+   ↓
+Linux VM
+   ↓
 Docker
-    │
-    │ Runs application
-    ▼
+   ↓
+Application
+   ↓
 GitHub Actions
-    │
-    │ Automates deployment
-    ▼
-CI/CD
-    │
-    │ Verifies deployment
-    ▼
+   ↓
+Automated Deployment
+   ↓
 Health Check
 ```
 
-And when something fails:
+Terraform was the most important new concept in this project because it changed the way I thought about cloud infrastructure:
 
-```text
-Failure
-   │
-   ▼
-Read the logs
-   │
-   ▼
-Understand the problem
-   │
-   ▼
-Fix the configuration
-   │
-   ▼
-Run again
-   │
-   ▼
-Success
-```
-
-That debugging cycle was an important part of the project.
+> Instead of manually creating infrastructure, infrastructure can be defined, reviewed, and created using code.
 
 ---
-
-## Next Learning Direction
-
-The next project should introduce a genuinely new DevOps concept rather than simply repeating the same Docker + Azure VM + basic CI/CD workflow.
-
-Possible next areas include:
-
-- Kubernetes
-- Container orchestration
-- Advanced CI/CD
-- Monitoring and observability
-- Further Infrastructure as Code
